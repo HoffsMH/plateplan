@@ -12,7 +12,7 @@ defmodule Plateplan do
       percents: [
         %{ value: 0.8, tolerance: 5},
         %{ value: 0.6, tolerance: 5},
-        %{ value: 0.4, tolerance: 5},
+        %{ value: 0.4, tolerance: 10},
       ],
       bars: []
     }
@@ -21,30 +21,42 @@ defmodule Plateplan do
 
     percent_bars = initial_state.percents
     |> Enum.map(fn %{value: value, tolerance: tolerance} ->
-      create_bar(value, tolerance, warmup_available_plates)
-      |> load_bar(value * input_weight)
+      if value <= 0.4 do
+        create_bar(value, tolerance, first_warmup_available_plates)
+        |> load_bar(value * input_weight)
+      else
+        create_bar(value, tolerance, warmup_available_plates)
+        |> load_bar(value * input_weight)
+      end
     end)
 
     %{initial_state|
-      bars: [main_bar | percent_bars]
+      bars: Enum.reverse([main_bar | percent_bars])
     }
   end
 
   def all_available_plates do
     [
-      %{ weight: 45, class: "h-full w-10" },
-      %{ weight: 25, class: "h-2/3 w-10" },
-      %{ weight: 10, class: "h-1/2 w-5" },
-      %{ weight: 5, class: "h-1/3 w-5" },
-      %{ weight: 2.5, class: "h-1/4 w-5" }
+      %{ weight: 45, class: "h-full" },
+      %{ weight: 25, class: "h-3/4" },
+      %{ weight: 10, class: "h-1/2 text-sm" },
+      %{ weight: 5, class: "h-1/3" },
+      %{ weight: 2.5, class: "h-1/4 w-4 text-xs overflow-visible break-all" }
     ]
   end
 
   def warmup_available_plates do
     [
-      %{ weight: 45, class: "h-full w-10" },
-      %{ weight: 25, class: "h-2/3 w-10" },
-      %{ weight: 10, class: "h-1/2 w-5" },
+      %{ weight: 45, class: "h-full" },
+      %{ weight: 25, class: "h-3/4" },
+      %{ weight: 10, class: "h-1/2 text-sm" }
+    ]
+  end
+
+  def first_warmup_available_plates do
+    [
+      %{ weight: 45, class: "h-full" },
+      %{ weight: 25, class: "h-3/4" },
     ]
   end
 

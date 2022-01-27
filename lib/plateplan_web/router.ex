@@ -17,7 +17,7 @@ defmodule PlateplanWeb.Router do
   scope "/", PlateplanWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", PlateplanLive
   end
 
   # Other scopes may use custom stacks.

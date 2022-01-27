@@ -1,0 +1,76 @@
+<div class="flex justify-between px-5 py-6 items-center relative">
+  <h1 class="text-5xl">Plate Plan</h1>
+
+  <.form
+    let={f}
+    for={:inputs}
+    phx-change="update"
+    onkeydown="return event.key != 'Enter';"
+    class="w-2/6"
+  >
+    <%= number_input f,
+      :input_weight,
+      class: "shadow appearance-none border rounded text-3xl py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full",
+      value: @state.input_weight
+    %>
+  </.form>
+</div>
+
+
+<%= for bar <- @state.bars do %>
+  <div class="h-32 bg-sky-300 my-1 z-bg relative drop-shadow-lg">
+    <div class="flex h-full flex-row absolute top-0 z-mid items-center w-1/3">
+      <div class="bg-slate-400 w-full z-mid h-5">
+        &nbsp;
+      </div>
+    </div>
+
+
+    <div class="flex h-full flex-row absolute top-0 z-mid items-center w-1/3">
+      <div class="relative left-6 bg-slate-400 w-5 z-mid h-14">
+        &nbsp;
+      </div>
+    </div>
+
+    <div class="flex h-full flex-row absolute top-0 z-mid items-center w-1/3">
+      <div class="relative left-6 bg-slate-400 w-full z-mid h-10 rounded-md">
+        &nbsp;
+      </div>
+    </div>
+
+    <div class="pl-10 h-full flex items-center justify-end absolute right-0 w-2/3">
+      <div class="mr-1">
+        <%= if bar.percent !== 1 do %>
+          ~<%= round(bar.percent * 100) %>%
+        <%= else %>
+          <%= round(bar.percent * 100) %>%
+        <%= end %>
+      </div>
+
+      <div class="mr-4 text-xs text-cyan-600">
+        <%= if bar.percent !== 1 do %>
+          off by <%= round bar.remaining_weight %> lbs
+        <%= end %>
+      </div>
+    </div>
+
+    <div class="left-10 flex h-full flex-row items-center absolute top-0">
+      <%= for plate <- bar.plates do %>
+
+      <div {%{class: "flex items-center justify-center bg-slate-300 border-solid border-2 border-stone-900 z-high " <> plate.class }} >
+          <%= plate.weight %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <%= if bar.percent !== 1 do %>
+    <div class="text-3xl px-6">
+      🠗
+    </div>
+  <%= end %>
+<% end %>
+<div class="h-96">
+</div>
+<pre class="bg-slate-100">
+<%= Jason.encode!(@state, pretty: true) %>
+</pre>
