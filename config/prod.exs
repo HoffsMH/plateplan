@@ -14,6 +14,11 @@ config :plateplan, PlateplanWeb.Endpoint, cache_static_manifest: "priv/static/ca
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :plateplan, PlateplanWeb.Endpoint,
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  server: true, # critical for Phoenix to run
+  root: ".",
+  version: Application.spec(:plateplan, :vsn)
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
