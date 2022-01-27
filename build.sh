@@ -14,12 +14,12 @@ rm -rf "_build"
 # Compile app and assets
 mix deps.get --only prod
 mix compile
-cd assets && npm install && npm run deploy && cd ..
+mix assets.deploy
 
 # create release
 # we don't need to create a tarball because the app will be
 # served directly from the build directory
-mix do phx.digest, distillery.release --env=prod --no-tar
+mix distillery.release --env=prod --no-tar
 
 echo "Linking release $APP_NAME:$APP_VSN to _render/"
 
