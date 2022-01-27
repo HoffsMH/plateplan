@@ -10,7 +10,7 @@ defmodule Plateplan do
     initial_state = %{
       input_weight: input_weight,
       percents: [
-        %{ value: 0.8, tolerance: 5},
+        %{ value: 0.8, tolerance: 10},
         %{ value: 0.6, tolerance: 10},
         %{ value: 0.4, tolerance: 10},
       ],
