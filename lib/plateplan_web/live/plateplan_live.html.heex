@@ -1,5 +1,10 @@
 <div class="flex justify-between px-5 py-6 items-center relative">
-  <h1 class="text-5xl">Plate Plan</h1>
+  <div>
+    <h1 class="text-5xl">Plate Plan</h1>
+    <p class="text-sm text-slate-400">
+      ...Always start with an empty bar!
+    </p>
+  </div>
 
   <.form
     let={f}
@@ -10,7 +15,7 @@
   >
     <%= number_input f,
       :input_weight,
-      class: "shadow appearance-none border rounded text-3xl py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full",
+      class: "shadow appearance-none border rounded text-4xl py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-full",
       value: @state.input_weight
     %>
   </.form>
