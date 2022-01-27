@@ -40,7 +40,7 @@
 
     <div class="pl-10 h-full flex items-center justify-end absolute right-0 w-2/3">
       <div class="mr-1">
-        <%= if bar.remaining_weight < 0 do %>
+        <%= if bar.remaining_weight != 0.0 do %>
           ~<%= round(bar.percent * 100) %>%
         <%= else %>
           <%= round(bar.percent * 100) %>%
@@ -48,8 +48,8 @@
       </div>
 
       <div class="mr-4 text-xs text-cyan-600">
-        <%= if bar.remaining_weight < 0 do %>
-          off by <%= round bar.remaining_weight %> lbs
+        <%= if bar.remaining_weight != 0.0 do %>
+          off by <%= bar.remaining_weight |> Float.to_string(decimals: 1) %> lbs
         <%= end %>
       </div>
     </div>
