@@ -11,8 +11,8 @@ defmodule Plateplan do
       input_weight: input_weight,
       percents: [
         %{ value: 0.8, tolerance: 5},
-        %{ value: 0.6, tolerance: 5},
-        %{ value: 0.4, tolerance: 20},
+        %{ value: 0.6, tolerance: 10},
+        %{ value: 0.4, tolerance: 10},
       ],
       bars: []
     }
@@ -94,7 +94,11 @@ defmodule Plateplan do
     load_bar(%{ bar| current_plate: first, available_plates: rest })
   end
 
-  def load_bar(bar) when  bar.remaining_weight < bar.current_plate.weight and length(bar.available_plates) < 1 do
+  def load_bar(bar = %{ remaining_weight: 0 }) do
+    bar
+  end
+
+  def load_bar(bar = %{available_plates: []}) when (bar.remaining_weight + bar.tolerance) < bar.current_plate.weight  do
     bar
   end
 
