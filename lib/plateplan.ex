@@ -12,7 +12,7 @@ defmodule Plateplan do
       percents: [
         %{ value: 0.8, tolerance: 5},
         %{ value: 0.6, tolerance: 5},
-        %{ value: 0.4, tolerance: 10},
+        %{ value: 0.4, tolerance: 20},
       ],
       bars: []
     }
