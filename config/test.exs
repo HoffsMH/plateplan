@@ -8,8 +8,7 @@ config :plateplan, PlateplanWeb.Endpoint,
   server: false
 
 # In test we don't send emails.
-config :plateplan, Plateplan.Mailer,
-  adapter: Swoosh.Adapters.Test
+config :plateplan, Plateplan.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
 config :logger, level: :warn

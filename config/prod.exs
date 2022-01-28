@@ -12,7 +12,8 @@ import Config
 config :plateplan, PlateplanWeb.Endpoint,
   url: [host: "plateplan.onrender.com"],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  server: true, # critical for Phoenix to run
+  # critical for Phoenix to run
+  server: true,
   root: ".",
   version: Application.spec(:plateplan, :vsn)
 
