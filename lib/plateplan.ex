@@ -10,22 +10,24 @@ defmodule Plateplan do
     initial_state = %{
       input_weight: input_weight,
       percents: [
-        %{ value: 0.8, tolerance: 10},
-        %{ value: 0.6, tolerance: 10},
-        %{ value: 0.4, tolerance: 10},
+        0.8,
+        0.6,
+        0.4
       ],
       bars: []
     }
-    main_bar = create_bar(1, 0, all_available_plates)
+    main_bar = create_bar(1, 0.0, all_available_plates)
     |> load_bar(input_weight)
 
+    padding = input_weight * 0.05
+
     percent_bars = initial_state.percents
-    |> Enum.map(fn %{value: value, tolerance: tolerance} ->
+    |> Enum.map(fn value ->
       if value <= 0.4 do
-        create_bar(value, tolerance, first_warmup_available_plates)
+        create_bar(value, padding, determine_available_warmup_plates(input_weight))
         |> load_bar(value * input_weight)
       else
-        create_bar(value, tolerance, warmup_available_plates)
+        create_bar(value, padding, determine_available_warmup_plates(input_weight))
         |> load_bar(value * input_weight)
       end
     end)
@@ -33,6 +35,13 @@ defmodule Plateplan do
     %{initial_state|
       bars: Enum.reverse([main_bar | percent_bars])
     }
+  end
+
+  def determine_available_warmup_plates(total_weight) do
+    all_available_plates
+    |> Enum.filter(fn plate ->
+      total_weight * 0.049 < plate.weight || plate.weight === 45
+    end)
   end
 
   def all_available_plates do
@@ -60,7 +69,7 @@ defmodule Plateplan do
     ]
   end
 
-  def create_bar(percent, tolerance, available_plates) do
+  def create_bar(percent, padding, available_plates) do
     %{
       remaining_weight: 0,
       percent: percent,
@@ -68,7 +77,7 @@ defmodule Plateplan do
       barred_weight: 0,
       available_plates: available_plates,
       current_plate: nil,
-      tolerance: tolerance,
+      padding: padding,
     }
   end
 
@@ -85,7 +94,7 @@ defmodule Plateplan do
 
     %{
       bar |
-      remaining_weight: plate_weight
+      remaining_weight: plate_weight,
     }
     |> load_bar()
   end
@@ -98,17 +107,21 @@ defmodule Plateplan do
     bar
   end
 
-  def load_bar(bar = %{available_plates: []}) when (bar.remaining_weight + bar.tolerance) < bar.current_plate.weight  do
+  def load_bar(bar = %{available_plates: []}) when (bar.remaining_weight + bar.padding) < bar.current_plate.weight  do
     bar
   end
 
-  def load_bar(bar = %{ plates: plates, remaining_weight: remaining_weight, tolerance: tolerance, current_plate: current_plate, available_plates: available_plates }) do
+  def load_bar(bar = %{ padding: padding, plates: plates, remaining_weight: remaining_weight, current_plate: current_plate, available_plates: available_plates }) do
+    IO.puts "---------"
+    IO.puts "padding: #{padding}"
+    IO.puts "current_plate: #{current_plate.weight}"
+    IO.puts "remaining_weight + padding: #{remaining_weight + padding}"
+    IO.puts "current_plate.weight <= (remaining_weight + padding): #{current_plate.weight <= (remaining_weight + padding)}"
+    IO.puts "---------"
 
-    if current_plate.weight <= (tolerance + remaining_weight) do
+    if current_plate.weight <= (remaining_weight + padding) do
       load_bar(%{ bar |
         remaining_weight: remaining_weight - current_plate.weight,
-        tolerance: tolerance,
-        current_plate: current_plate,
         plates: plates ++ [current_plate],
         barred_weight: bar.barred_weight + current_plate.weight
       })
