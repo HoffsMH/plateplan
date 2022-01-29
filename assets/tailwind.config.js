@@ -3,7 +3,11 @@ module.exports = {
     './js/**/*.js',
     '../lib/*_web/**/*.*ex'
   ],
-  theme: {},
+  theme: {
+    fontFamily: {
+      sans: ['Helvetica']
+    }
+  },
   variants: {},
   plugins: []
 };
